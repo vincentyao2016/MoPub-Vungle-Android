@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".BannerActivity">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/load_banner_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Banner" />
+                <Button
+                    android:id="@+id/load_short_banner_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Short Banner" />
+                <Button
+                    android:id="@+id/load_long_banner_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Long Banner" />
+                <Button
+                    android:id="@+id/load_mrec_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="MREC" />
+            </LinearLayout>
+
+            <!--Banner size has to be 320*50, 300*50, 728*90  MREC has to be 300*50-->
+            <!--Or you would get no fill-->
+            <com.mopub.mobileads.MoPubView
+                android:id="@+id/banner_container"
+                android:layout_width="320dp"
+                android:layout_height="50dp" />
+
+            <com.mopub.mobileads.MoPubView
+                android:id="@+id/short_banner_container"
+                android:layout_width="300dp"
+                android:layout_height="50dp" />
+
+            <com.mopub.mobileads.MoPubView
+                android:id="@+id/long_banner_container"
+                android:layout_width="728dp"
+                android:layout_height="90dp" />
+
+            <com.mopub.mobileads.MoPubView
+                android:id="@+id/mrec_container"
+                android:layout_width="300dp"
+                android:layout_height="250dp" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

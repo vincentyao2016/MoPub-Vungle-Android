@@ -1,6 +1,7 @@
 package com.vincent.mopubvungle;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,7 +21,12 @@ import com.mopub.mobileads.MoPubInterstitial;
 import com.mopub.mobileads.MoPubRewardedVideoListener;
 import com.mopub.mobileads.MoPubRewardedVideos;
 import com.mopub.mobileads.MoPubView;
+import com.mopub.mobileads.VungleAdapterConfiguration;
+import com.mopub.mobileads.VungleMediationConfiguration;
+import com.vungle.warren.AdConfig;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -28,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private MoPubView bannerContainer,mrecContainer;
     private MoPubInterstitial mInterstitial;
     private String adUnitId,interstitialPlacementId,bannerPlacementId,rewardPlacementId,mrecPlacementId;
+    private VungleMediationConfiguration vungleMediationConfiguration;
     private static String TAG = "MoPubVungle";
 
     @Override
@@ -45,8 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button playInterstitialBtn = findViewById(R.id.play_interstitial_btn);
         Button loadRewardBtn = findViewById(R.id.load_reward_btn);
         Button playRewardBtn = findViewById(R.id.play_reward_btn);
-        Button loadMrecBtn = findViewById(R.id.load_mrec_btn);
-        Button loadBannerBtn = findViewById(R.id.load_banner_btn);
+        Button goBannerBtn = findViewById(R.id.go_banner_btn);
 
         bannerContainer = findViewById(R.id.banner_container);
         mrecContainer = findViewById(R.id.mrec_container);
@@ -56,8 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         playInterstitialBtn.setOnClickListener(this);
         loadRewardBtn.setOnClickListener(this);
         playRewardBtn.setOnClickListener(this);
-        loadMrecBtn.setOnClickListener(this);
-        loadBannerBtn.setOnClickListener(this);
+        goBannerBtn.setOnClickListener(this);
 
         adUnitId = context.getString(R.string.ad_unit_id);
         interstitialPlacementId = context.getString(R.string.interstitial_placement_id);
@@ -67,7 +72,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void init() {
-        SdkConfiguration sdkConfiguration = new SdkConfiguration.Builder(adUnitId)
+        Map<String, String> vungleSettings = new HashMap<>();
+//        vungleSettings.put("VNG_DEVICE_ID_OPT_OUT", "true");
+        vungleSettings.put("appId", "56e0df40945f181a3c000012");
+//        vungleSettings.put("VNG_MIN_SPACE_INIT", "99999999999");
+//        vungleSettings.put("VNG_MIN_SPACE_LOAD_AD", "99999999999");
+
+        SdkConfiguration sdkConfiguration = new SdkConfiguration.Builder(rewardPlacementId)
+                .withMediatedNetworkConfiguration(VungleAdapterConfiguration.class.getName(), vungleSettings)
                 .withLogLevel(MoPubLog.LogLevel.DEBUG)
                 .withLegitimateInterestAllowed(false)
                 .build();
@@ -80,6 +92,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         mInterstitial = new MoPubInterstitial(MainActivity.this, interstitialPlacementId);
+        vungleMediationConfiguration = new VungleMediationConfiguration.Builder()
+        .withAutoRotate(AdConfig.LANDSCAPE)
+        .withStartMuted(true)
+        .withOrdinalViewCount(10)
+        .withUserId("IE-Vincent")
+        .withCancelDialogBody("CUSTOM_BODY")
+        .withCancelDialogCloseButton("CUSTOM_CLOSE")
+        .withCancelDialogKeepWatchingButton("CUSTOM_KEEPWATCHING")
+        .withCancelDialogTitle("CUSTOM_TITLE")
+        .build();
+        mInterstitial.setLocalExtras(vungleMediationConfiguration.getExtrasMap());
+
         mInterstitial.setInterstitialAdListener(new MoPubInterstitial.InterstitialAdListener() {
             @Override
             public void onInterstitialLoaded(MoPubInterstitial interstitial) {
@@ -188,28 +212,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void loadReward() {
-        MoPubRewardedVideos.loadRewardedVideo(rewardPlacementId);
+        MoPubRewardedVideos.loadRewardedVideo(rewardPlacementId,vungleMediationConfiguration);
     }
 
     public void playReward() {
-        if (MoPubRewardedVideos.hasRewardedVideo(rewardPlacementId)) {
-            MoPubRewardedVideos.showRewardedVideo(rewardPlacementId);
-        } else {
-            Toast.makeText(context,"Reward is not ready",Toast.LENGTH_SHORT ).show();
-        }
+//        if (MoPubRewardedVideos.hasRewardedVideo(rewardPlacementId)) {
+//            MoPubRewardedVideos.showRewardedVideo(rewardPlacementId);
+//        } else {
+//            Toast.makeText(context,"Reward is not ready",Toast.LENGTH_SHORT ).show();
+//        }
+        MoPubRewardedVideos.showRewardedVideo(rewardPlacementId);
     }
 
-    public void loadMRECAd() {
-        mrecContainer.setAdUnitId(mrecPlacementId);
-        mrecContainer.setAdSize(MoPubView.MoPubAdSize.HEIGHT_250);
-        mrecContainer.loadAd();
+    public void goBanner() {
+        Intent i = new Intent(MainActivity.this, BannerActivity.class);
+        startActivity(i);
     }
 
-    public void loadBannerAd() {
-        bannerContainer.setAdUnitId(bannerPlacementId);
-        bannerContainer.setAdSize(MoPubView.MoPubAdSize.HEIGHT_50);
-        bannerContainer.loadAd();
-    }
+
 
     @Override
     public void onClick(View view) {
@@ -222,11 +242,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.play_interstitial_btn:
                 playInterstitial();
-            case R.id.load_mrec_btn:
-                loadMRECAd();
-                break;
-            case R.id.load_banner_btn:
-                loadBannerAd();
+            case R.id.go_banner_btn:
+                goBanner();
                 break;
             case R.id.load_reward_btn:
                 loadReward();

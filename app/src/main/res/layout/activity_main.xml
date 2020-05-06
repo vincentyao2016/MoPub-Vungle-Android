@@ -45,16 +45,10 @@
                 android:text="Play Reward" />
 
             <Button
-                android:id="@+id/load_mrec_btn"
+                android:id="@+id/go_banner_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Load and Play Mrec" />
-
-            <Button
-                android:id="@+id/load_banner_btn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Load and Play Banner" />
+                android:text="Go Banner" />
 
             <!--Banner size has to be 320*50, 300*50, 728*90  MREC has to be 300*50-->
             <!--Or you would get no fill-->
