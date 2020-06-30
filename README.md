@@ -28,8 +28,8 @@ https://developers.mopub.com/publishers/ios/integrate/
 ## Tested Version
 
 Mopub: 
-5.10.0
+5.13.0
 
 Vungle + Adapter: 
-6.5.0 + 6.5.0.0
+6.7.0 + 6.7.0.0
 
