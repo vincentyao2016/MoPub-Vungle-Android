@@ -242,9 +242,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.play_interstitial_btn:
                 playInterstitial();
-            case R.id.go_banner_btn:
-                goBanner();
-                break;
+//            case R.id.go_banner_btn:
+//                goBanner();
+//                break;
             case R.id.load_reward_btn:
                 loadReward();
                 break;
